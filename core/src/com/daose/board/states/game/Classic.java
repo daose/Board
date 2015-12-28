@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.daose.board.Board;
 import com.daose.board.states.GSM;
+import com.daose.board.states.MenuState;
 import com.daose.board.states.State;
+import com.daose.board.ui.Score;
 import com.daose.board.ui.Tile;
 
 /**
@@ -39,6 +41,11 @@ public class Classic extends State {
     private Difficulty difficulty;
     private int[] boardInfo;
 
+    private Score score;
+    private int completeBonus;
+
+    private float scoreTimer;
+
     public Classic(GSM gsm, Difficulty difficulty){
         super(gsm);
 
@@ -48,6 +55,7 @@ public class Classic extends State {
         this.difficulty = difficulty;
         level = 1;
         boardInfo = new int[3];
+        score = new Score(Board.WIDTH / 2, Board.HEIGHT / 2 + 300);
 
         //0 = size, 1 = solution size, 2 = number of levels
         getBoardInfo();
@@ -57,57 +65,7 @@ public class Classic extends State {
 
     }
 
-    private void getBoardInfo(){
-        if(difficulty == Difficulty.EASY){
-            boardInfo[0] = 3;
-            boardInfo[1] = 3;
-            boardInfo[2] = 3;
-        } else if(difficulty == Difficulty.NORMAL){
-            boardInfo[2] = 5;
-            if(level == boardInfo[2]){
-                boardInfo[0] = 7;
-            } else boardInfo[0] = 5;
-            switch(level){
-                case 1:
-                case 2:
-                    boardInfo[1] = 3;
-                    break;
-                case 3:
-                    boardInfo[1] = 5;
-                    break;
-                case 4:
-                    boardInfo[1] = 6;
-                    break;
-                case 5:
-                    boardInfo[1] = 8;
-                    break;
-            }
-        } else if(difficulty == Difficulty.HARD){
-            boardInfo[2] = 10;
-            if(level == boardInfo[2]){
-                boardInfo[0] = 9;
-            } else boardInfo[0] = 7;
-            switch(level){
-                case 1:
-                case 2:
-                    boardInfo[1] = 4;
-                    break;
-                case 3:
-                case 4:
-                    boardInfo[1] = 5;
-                case 5:
-                case 6:
-                    boardInfo[1] = 6;
-                case 7:
-                case 8:
-                    boardInfo[1] = 7;
-                case 9:
-                    boardInfo[1] = 8;
-                case 10:
-                    boardInfo[1] = 10;
-            }
-        }
-    }
+
 
     private void createBoard(int size){
         tiles = new Tile[size][size];
@@ -140,11 +98,13 @@ public class Classic extends State {
 
     private void resetBoard(){
         solutionTimer = 0;
+        scoreTimer = 5;
         isShowing = true;
         solution.clear();
         selected.clear();
         correct.clear();
     }
+
     public void handleInput() {
         if(Gdx.input.justTouched() && !isShowing){
             tileTapped();
@@ -163,8 +123,12 @@ public class Classic extends State {
                     tiles[row][col].setSelected(true);
                     if(solution.contains(tiles[row][col], true)){
                         correct.add(tiles[row][col]);
+                        int incScore = (int) (5 * scoreTimer);
+                        score.increment(incScore);
                         if(correct.size == solution.size){
-                            System.out.println(level);
+
+                            //Completed Board bonus
+                            score.increment(completeBonus);
                             level++;
                             if(level > boardInfo[2]){
                                 done();
@@ -174,13 +138,15 @@ public class Classic extends State {
                             createBoard(boardInfo[0]);
                             createSolution(boardInfo[1]);
                         }
+                    } else {
+                        score.increment(-10);
                     }
                 }
             }
     }
 
     private void done(){
-        Gdx.app.exit();
+        gsm.set(new MenuState(gsm));
     }
 
     public void updateTiles(float dt){
@@ -194,6 +160,7 @@ public class Classic extends State {
     public void update(float dt) {
         handleInput();
         updateTiles(dt);
+        score.update(dt);
         if(isShowing){
             solutionTimer += dt;
             if(solutionTimer > 2){
@@ -202,6 +169,9 @@ public class Classic extends State {
                 }
                 isShowing = false;
             }
+        } else if (scoreTimer > 0) {
+            scoreTimer -= dt;
+            if (scoreTimer < 0) scoreTimer = 0;
         }
     }
 
@@ -213,15 +183,71 @@ public class Classic extends State {
                 tiles[row][col].render(sb);
             }
         }
+        score.render(sb);
         sb.end();
     }
-        private void setTileTimer(){
+
+    private void getBoardInfo() {
+        if (difficulty == Difficulty.EASY) {
+            boardInfo[0] = 3;
+            boardInfo[1] = 3;
+            boardInfo[2] = 3;
+            completeBonus = 10;
+        } else if (difficulty == Difficulty.NORMAL) {
+            boardInfo[2] = 5;
+            completeBonus = 50;
+            if (level == boardInfo[2]) {
+                boardInfo[0] = 7;
+            } else boardInfo[0] = 5;
+            switch (level) {
+                case 1:
+                case 2:
+                    boardInfo[1] = 3;
+                    break;
+                case 3:
+                    boardInfo[1] = 5;
+                    break;
+                case 4:
+                    boardInfo[1] = 6;
+                    break;
+                case 5:
+                    boardInfo[1] = 8;
+                    break;
+            }
+        } else if (difficulty == Difficulty.HARD) {
+            boardInfo[2] = 10;
+            completeBonus = 100;
+            if (level == boardInfo[2]) {
+                boardInfo[0] = 9;
+            } else boardInfo[0] = 7;
+            switch (level) {
+                case 1:
+                case 2:
+                    boardInfo[1] = 4;
+                    break;
+                case 3:
+                case 4:
+                    boardInfo[1] = 5;
+                case 5:
+                case 6:
+                    boardInfo[1] = 6;
+                case 7:
+                case 8:
+                    boardInfo[1] = 7;
+                case 9:
+                    boardInfo[1] = 8;
+                case 10:
+                    boardInfo[1] = 10;
+            }
+        }
+    }
+
+    private void setTileTimer() {
 
         //if size is odd
         int middleRow = tiles.length / 2;
         int middleCol = tiles.length / 2;
         int waves = tiles.length / 2 + 1;
-        int[] steps = {1, 3, 5};
         for(int i = 0; i < waves; i++){
             int row, col, j;
 
