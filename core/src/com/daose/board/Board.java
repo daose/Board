@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.daose.board.states.GSM;
-import com.daose.board.states.game.Classic;
+import com.daose.board.states.MenuState;
 
 public class Board extends ApplicationAdapter {
 
@@ -30,8 +30,8 @@ public class Board extends ApplicationAdapter {
 
         sb = new SpriteBatch();
 
-        texture = new Texture(Gdx.files.internal("android/assets/blocks.png"));
-        score = new Texture(Gdx.files.internal("android/assets/score.png"));
+        texture = new Texture(Gdx.files.internal("blocks.png"));
+        score = new Texture(Gdx.files.internal("score.png"));
 
         regions = new TextureRegion[2];
         regions[0] = new TextureRegion(texture, 0, 0, 2, 2);
@@ -43,8 +43,8 @@ public class Board extends ApplicationAdapter {
         }
 
         gsm = new GSM();
-        gsm.push(new Classic(gsm, Classic.Difficulty.NORMAL));
-        //gsm.push(new MenuState(gsm));
+        //gsm.push(new Classic(gsm, Classic.Difficulty.NORMAL));
+        gsm.push(new MenuState(gsm));
     }
 
 
