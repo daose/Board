@@ -3,7 +3,6 @@ package com.daose.board.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.daose.board.Board;
-import com.daose.board.states.game.Classic;
 import com.daose.board.ui.Button;
 import com.daose.board.ui.TextField;
 
@@ -11,6 +10,10 @@ import com.daose.board.ui.TextField;
  * Created by student on 27/12/15.
  */
 public class MenuState extends State {
+
+    public enum GameMode {
+        CLASSIC
+    }
 
     private TextField title, classic;
     private Button classicButton;
@@ -28,7 +31,7 @@ public class MenuState extends State {
             tap.y = Gdx.input.getY();
             cam.unproject(tap);
             if(classicButton.contains(tap.x, tap.y)){
-                gsm.set(new Classic(gsm, Classic.Difficulty.NORMAL));
+                gsm.set(new DifficultyState(gsm, GameMode.CLASSIC));
             }
         }
     }

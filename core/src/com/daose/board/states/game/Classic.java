@@ -5,9 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.daose.board.Board;
+import com.daose.board.helper.Stats;
 import com.daose.board.states.GSM;
-import com.daose.board.states.MenuState;
 import com.daose.board.states.State;
+import com.daose.board.states.StatsScreen;
 import com.daose.board.ui.Score;
 import com.daose.board.ui.Tile;
 
@@ -46,16 +47,21 @@ public class Classic extends State {
 
     private float scoreTimer;
 
+    private Stats stats;
+
     public Classic(GSM gsm, Difficulty difficulty){
         super(gsm);
 
         solution = new Array<Tile>();
         selected = new Array<Tile>();
         correct = new Array<Tile>();
+
         this.difficulty = difficulty;
         level = 1;
         boardInfo = new int[3];
         score = new Score(Board.WIDTH / 2, Board.HEIGHT / 2 + 300);
+        stats = new Stats();
+        stats.setDifficulty(difficulty);
 
         //0 = size, 1 = solution size, 2 = number of levels
         getBoardInfo();
@@ -122,14 +128,16 @@ public class Classic extends State {
                     selected.add(tiles[row][col]);
                     tiles[row][col].setSelected(true);
                     if(solution.contains(tiles[row][col], true)){
+                        stats.incrementCorrect();
                         correct.add(tiles[row][col]);
                         int incScore = (int) (5 * scoreTimer);
-                        score.increment(incScore);
                         if(correct.size == solution.size){
 
                             //Completed Board bonus
+                            stats.incrementCompleted();
                             score.increment(completeBonus);
                             level++;
+
                             if(level > boardInfo[2]){
                                 done();
                             }
@@ -137,8 +145,9 @@ public class Classic extends State {
                             getBoardInfo();
                             createBoard(boardInfo[0]);
                             createSolution(boardInfo[1]);
-                        }
+                        } else score.increment(incScore);
                     } else {
+                        stats.incrementIncorrect();
                         score.increment(-10);
                     }
                 }
@@ -146,7 +155,8 @@ public class Classic extends State {
     }
 
     private void done(){
-        gsm.set(new MenuState(gsm));
+        stats.setGameScore(score.getScore());
+        gsm.set(new StatsScreen(gsm, stats));
     }
 
     public void updateTiles(float dt){
@@ -201,8 +211,10 @@ public class Classic extends State {
             } else boardInfo[0] = 5;
             switch (level) {
                 case 1:
-                case 2:
                     boardInfo[1] = 3;
+                    break;
+                case 2:
+                    boardInfo[1] = 4;
                     break;
                 case 3:
                     boardInfo[1] = 5;
