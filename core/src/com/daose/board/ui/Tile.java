@@ -10,18 +10,19 @@ import com.daose.board.Board;
 public class Tile {
 
     //Tile properties
-    private float x;
-    private float y;
-    private float width;
-    private float height;
-    private float currentWidth;
-    private float currentHeight;
-    private boolean selected;
+    protected float x;
+    protected float y;
+    protected float width;
+    protected float height;
+    protected float currentWidth;
+    protected float currentHeight;
+    protected boolean selected;
+
     private float timer;
     private float animationTime;
 
     //Tile textures
-    private TextureRegion light, dark;
+    protected TextureRegion light, dark;
 
     public Tile(int x, int y, int width, int height) {
 

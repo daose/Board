@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.daose.board.states.GSM;
-import com.daose.board.states.game.Classic;
+import com.daose.board.states.MenuState;
 
 public class Board extends ApplicationAdapter {
 
@@ -33,7 +33,8 @@ public class Board extends ApplicationAdapter {
         regions[1] = new TextureRegion(texture, 2, 0, 2, 2);
 
         gsm = new GSM();
-        gsm.push(new Classic(gsm, Classic.Difficulty.HARD));
+        //gsm.push(new Classic(gsm, Classic.Difficulty.HARD));
+        gsm.push(new MenuState(gsm));
 	}
 
 
