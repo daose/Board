@@ -21,7 +21,7 @@ public class TextField {
     private int x, y, size;
 
     public TextField(String text, int size, int x, int y, boolean shadow){
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("android/assets/baby blocks.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("baby blocks.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = size;
         parameter.color = Color.BLACK;
