@@ -132,24 +132,27 @@ public class Classic extends State {
                     selected.add(tiles[row][col]);
                     tiles[row][col].setSelected(true);
                     if(solution.contains(tiles[row][col], true)){
+
                         stats.incrementCorrect();
                         correct.add(tiles[row][col]);
                         int incScore = (int) (5 * scoreTimer);
+                        score.increment(incScore);
+
                         if(correct.size == solution.size){
 
-                            //Completed Board bonus
                             stats.incrementCompleted();
-                            score.increment(completeBonus);
                             level++;
 
                             if(level > boardInfo[2]){
                                 done();
                             }
+
                             resetBoard();
                             getBoardInfo();
                             createBoard(boardInfo[0]);
                             createSolution(boardInfo[1]);
-                        } else score.increment(incScore);
+
+                        }
                     } else {
                         stats.incrementIncorrect();
                         score.increment(-10);
@@ -272,25 +275,31 @@ public class Classic extends State {
             row = middleRow - i;
             col = middleCol - i;
             for(j = 0; j < (2*i) + 1; j++) {
-                tiles[row][col].setTimer(-(0.15f) * i);
+                tiles[row][col].setTimer(myFunc(i));
                 if((j+1) < (2*i) + 1) col++;
             }
             //Right column (bottom -> top)
-            for(j = 0; j < (2*i) + 1; j++){
-                tiles[row][col].setTimer(-(0.15f) * i);
-                if((j+1) < (2*i) + 1) row++;
+            row++;
+            for (j = 0; j < (2 * i); j++) {
+                tiles[row][col].setTimer(myFunc(i));
+                if (j < (2 * i) - 1) row++;
             }
             //Top Row (left <- right)
-            for(j = 0; j < (2*i) + 1; j++){
-                tiles[row][col].setTimer(-(0.15f) * i);
-                if((j+1) < (2*i) + 1) col--;
+            col--;
+            for (j = 0; j < (2 * i); j++) {
+                tiles[row][col].setTimer(myFunc(i));
+                if (j < (2 * i) - 1) col--;
             }
             //Left column (top -> bottom)
-            for(j = 0; j < (2*i) + 1; j++){
-                tiles[row][col].setTimer(-(0.15f) * i);
-                if((j+1) < (2*i) + 1) row--;
+            row--;
+            for (j = 0; j < (2 * i); j++) {
+                tiles[row][col].setTimer(myFunc(i));
+                if (j < (2 * i) - 1) row--;
             }
-
         }
+    }
+
+    private float myFunc(int i) {
+        return (float) -0.15 * i;
     }
 }

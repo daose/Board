@@ -13,7 +13,7 @@ public class Button extends Tile {
 
     public void render(SpriteBatch sb) {
         if (selected) {
-            sb.draw(dark, (x - width / 2), (y - width / 2), width, height);
+            sb.draw(dark, (x - width / 2), (y - height / 2), width, height);
         } else {
             sb.draw(light, (x - width / 2), (y - height / 2), width, height);
         }
