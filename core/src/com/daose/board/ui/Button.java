@@ -1,6 +1,8 @@
 package com.daose.board.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
+import com.daose.board.Board;
 
 /**
  * Created by student on 27/12/15.
@@ -25,6 +27,15 @@ public class Button extends Tile {
 
     public float getX(){
         return x;
+    }
+
+    public void drawText(SpriteBatch sb, String text, int size) {
+        if (size == 64) {
+            Board.font64.draw(sb, text, x - width / 2, y + 25, width, Align.center, true);
+        }
+        if (size == 32) {
+            Board.font32.draw(sb, text, x - width / 2, y + 10, width, Align.center, true);
+        }
     }
 
     public float getY(){

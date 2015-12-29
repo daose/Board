@@ -2,7 +2,6 @@ package com.daose.board.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import com.daose.board.Board;
 import com.daose.board.states.game.Classic;
 import com.daose.board.ui.Button;
@@ -81,14 +80,11 @@ public class DifficultyState extends State {
         hard.render(sb);
         sb.setColor(1, 1, 1, 1);
 
-        ButtonText(sb, "Easy", easy);
-        ButtonText(sb, "Casual", casual);
-        ButtonText(sb, "Hard", hard);
+        easy.drawText(sb, "easy", 64);
+        casual.drawText(sb, "casual", 64);
+        hard.drawText(sb, "hard", 64);
 
         sb.end();
     }
 
-    private void ButtonText(SpriteBatch sb, String text, Button button) {
-        Board.font64.draw(sb, text, button.getX() - button.getWidth() / 2, button.getY() + 25, button.getWidth(), Align.center, true);
-    }
 }

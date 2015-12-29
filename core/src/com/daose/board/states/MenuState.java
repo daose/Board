@@ -3,10 +3,8 @@ package com.daose.board.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.daose.board.Board;
 import com.daose.board.ui.Button;
-import com.daose.board.ui.TextField;
 
 /**
  * Created by student on 27/12/15.
@@ -17,7 +15,6 @@ public class MenuState extends State {
         CLASSIC
     }
 
-    private Array<TextField> text;
     private Button classicButton;
 
     public MenuState(GSM gsm){
@@ -51,11 +48,7 @@ public class MenuState extends State {
         sb.begin();
         classicButton.render(sb);
         Board.font128.draw(sb, "Tappy Tiles", 40, Board.HEIGHT / 2 + 250, Board.WIDTH - 50, Align.center, true);
-        Board.font64.draw(
-                sb, "Classic",
-                classicButton.getX() - classicButton.getWidth() / 2,
-                classicButton.getY() + 25,
-                classicButton.getWidth(), Align.center, true);
+        classicButton.drawText(sb, "CLASSIC", 64);
         sb.end();
     }
 }

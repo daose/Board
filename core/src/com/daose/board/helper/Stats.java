@@ -14,12 +14,22 @@ public class Stats {
     private int accuracy;
     private int gameScore;
     private Classic.Difficulty difficulty;
+    private float time;
 
     public Stats() {
         correct = 0;
         incorrect = 0;
         completed = 0;
         gameScore = 0;
+        time = 0;
+    }
+
+    public void incTime(float dt) {
+        time += dt;
+    }
+
+    public float getTotalTime() {
+        return time;
     }
 
     public void setDifficulty(Classic.Difficulty difficulty) {
@@ -51,6 +61,7 @@ public class Stats {
     }
 
     public int getAccuracy() {
+        if (correct + incorrect == 0) return 0;
         float calcPercent = (float) (correct / (correct + incorrect) * 100);
         accuracy = MathUtils.round(calcPercent);
         return accuracy;
