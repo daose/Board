@@ -31,7 +31,7 @@ public class StatsScreen extends State {
                 gradingScheme = 180;
                 break;
             case NORMAL:
-                gradingScheme = 800;
+                gradingScheme = 775;
                 break;
             case HARD:
                 gradingScheme = 2000;
@@ -61,7 +61,7 @@ public class StatsScreen extends State {
 
     public void handleInput() {
         if (Gdx.input.justTouched()) {
-            gsm.set(new MenuState(gsm));
+            gsm.set(new TransitionState(gsm, this, new MenuState(gsm), TransitionState.TransitionStyle.FADE));
         }
     }
 
@@ -76,5 +76,10 @@ public class StatsScreen extends State {
         gradeText.render(sb);
         gradeTitle.render(sb);
         sb.end();
+    }
+
+    public void dispose() {
+        gradeText.dispose();
+        gradeTitle.dispose();
     }
 }

@@ -39,6 +39,10 @@ public class TextField {
         this.size = size;
     }
 
+    public void dispose() {
+        titleFont.dispose();
+    }
+
     //draws from upper left corner
     public void render(SpriteBatch sb){
         titleFont.draw(sb, text, x - (text.length() * size/4), y + size);

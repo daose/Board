@@ -1,7 +1,6 @@
 package com.daose.board.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.daose.board.Board;
 
 /**
@@ -10,7 +9,6 @@ import com.daose.board.Board;
 public class Score {
 
     private int x, y, score, width, height, incremented;
-    private TextureRegion[] numbers;
     private String scoreText;
 
     private float timer;
@@ -23,7 +21,6 @@ public class Score {
         scoreText = "0";
         height = 53;
         width = 40;
-        numbers = Board.numbers;
         animationTime = 0.5f;
         timer = 1;
     }
@@ -88,6 +85,4 @@ public class Score {
         }
         sb.setColor(1, 1, 1, 1);
     }
-
-
 }

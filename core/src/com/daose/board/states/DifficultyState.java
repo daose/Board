@@ -2,6 +2,7 @@ package com.daose.board.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.daose.board.Board;
 import com.daose.board.states.game.Classic;
 import com.daose.board.ui.Button;
@@ -16,6 +17,7 @@ public class DifficultyState extends State {
 
     private Button[] difficulty;
     private TextField easyText, casualText, hardText;
+    private Array<TextField> text;
 
     public DifficultyState(GSM gsm, MenuState.GameMode mode) {
         super(gsm);
@@ -29,7 +31,17 @@ public class DifficultyState extends State {
         easyText = new TextField("easy", 64, Board.WIDTH / 2 + 10, Board.HEIGHT / 2 + 140, true);
         casualText = new TextField("casual", 64, Board.WIDTH / 2 + 10, Board.HEIGHT / 2 - 10, true);
         hardText = new TextField("hard", 64, Board.WIDTH / 2 + 10, Board.HEIGHT / 2 - 160, true);
+        text = new Array<TextField>();
+        text.add(easyText);
+        text.add(casualText);
+        text.add(hardText);
 
+    }
+
+    public void dispose() {
+        for (int i = 0; i < text.size; i++) {
+            text.get(i).dispose();
+        }
     }
 
     public void handleInput() {
@@ -42,17 +54,17 @@ public class DifficultyState extends State {
                     switch (i) {
                         case 0:
                             if (mode.toString().equals("CLASSIC")) {
-                                gsm.set(new Classic(gsm, Classic.Difficulty.EASY));
+                                gsm.set(new TransitionState(gsm, this, new Classic(gsm, Classic.Difficulty.EASY), TransitionState.TransitionStyle.FADE));
                             }
                             break;
                         case 1:
                             if (mode.toString().equals("CLASSIC")) {
-                                gsm.set(new Classic(gsm, Classic.Difficulty.NORMAL));
+                                gsm.set(new TransitionState(gsm, this, new Classic(gsm, Classic.Difficulty.NORMAL), TransitionState.TransitionStyle.FADE));
                             }
                             break;
                         case 2:
                             if (mode.toString().equals("CLASSIC")) {
-                                gsm.set(new Classic(gsm, Classic.Difficulty.HARD));
+                                gsm.set(new TransitionState(gsm, this, new Classic(gsm, Classic.Difficulty.HARD), TransitionState.TransitionStyle.FADE));
                             }
                             break;
                     }

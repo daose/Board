@@ -9,6 +9,7 @@ import com.daose.board.helper.Stats;
 import com.daose.board.states.GSM;
 import com.daose.board.states.State;
 import com.daose.board.states.StatsScreen;
+import com.daose.board.states.TransitionState;
 import com.daose.board.ui.Score;
 import com.daose.board.ui.Tile;
 
@@ -71,6 +72,9 @@ public class Classic extends State {
 
     }
 
+    public void dispose() {
+
+    }
 
 
     private void createBoard(int size){
@@ -156,7 +160,7 @@ public class Classic extends State {
 
     private void done(){
         stats.setGameScore(score.getScore());
-        gsm.set(new StatsScreen(gsm, stats));
+        gsm.set(new TransitionState(gsm, this, new StatsScreen(gsm, stats), TransitionState.TransitionStyle.FADE));
     }
 
     public void updateTiles(float dt){
