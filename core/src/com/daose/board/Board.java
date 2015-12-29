@@ -30,8 +30,8 @@ public class Board extends ApplicationAdapter {
 
         sb = new SpriteBatch();
 
-        texture = new Texture(Gdx.files.internal("android/assets/blocks.png"));
-        score = new Texture(Gdx.files.internal("android/assets/score.png"));
+        texture = new Texture(Gdx.files.internal("blocks.png"));
+        score = new Texture(Gdx.files.internal("score.png"));
 
         regions = new TextureRegion[2];
         regions[0] = new TextureRegion(texture, 0, 0, 2, 2);
