@@ -17,8 +17,8 @@ public class StatsScreen extends State {
 
     private Stats stats;
     private Score finalScore;
-    private int gradingScheme, inc;
-    private float percentage;
+    private int inc;
+    private float percentage, gradingScheme;
     private int accuracy;
     private char grade;
     private State prev;
@@ -74,10 +74,10 @@ public class StatsScreen extends State {
 
         if (bonus) {
             bonusDesc = new GlyphLayout(Board.font32, "no skips!");
-            percentage = (float) finalScore.getScore() + inc / gradingScheme;
+            percentage = ((finalScore.getScore() + inc) / gradingScheme);
         } else {
             bonusDesc = new GlyphLayout(Board.font32, "none");
-            percentage = (float) finalScore.getScore() / gradingScheme;
+            percentage = (finalScore.getScore() / gradingScheme);
         }
 
         grade = calculateGrade();

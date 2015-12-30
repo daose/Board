@@ -67,15 +67,11 @@ public class Stats {
 
     public int getAccuracy() {
         if (correct + incorrect == 0) return 0;
-        System.out.println("Correct: " + correct + ", Incorrect: " + incorrect);
         int total = correct + incorrect;
         float calcPercent;
         calcPercent = (float) correct / total;
         calcPercent *= 100;
-        System.out.println("Calc Percent: " + calcPercent);
         accuracy = MathUtils.round(calcPercent);
-        System.out.println(accuracy);
         return accuracy;
     }
-
 }

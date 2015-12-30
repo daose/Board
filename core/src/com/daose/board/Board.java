@@ -2,6 +2,7 @@ package com.daose.board;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,12 +33,16 @@ public class Board extends ApplicationAdapter {
 
     public static BitmapFont font32, font64, font128;
 
+    public static Sound tapped;
+
 	public void create () {
         Gdx.gl.glClearColor(241f / 255, 242f / 255, 240f / 255, 1);
 
         sb = new SpriteBatch();
         initText();
         initImages();
+
+        tapped = Gdx.audio.newSound(Gdx.files.internal("tapped.wav"));
 
         gsm = new GSM();
         gsm.push(new MenuState(gsm));

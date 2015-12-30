@@ -157,7 +157,7 @@ public class Classic extends State {
             selected.add(tiles[row][col]);
             tiles[row][col].setSelected(true);
             if (solution.contains(tiles[row][col], true)) {
-
+                Board.tapped.play();
                 stats.incrementCorrect();
                 correct.add(tiles[row][col]);
                 int incScore = (int) (5 * scoreTimer);
@@ -167,6 +167,7 @@ public class Classic extends State {
                     nextLevel();
                 }
             } else {
+                Board.tapped.play(1, 0.8f, 1);
                 stats.incrementIncorrect();
                 score.increment(-10);
             }
