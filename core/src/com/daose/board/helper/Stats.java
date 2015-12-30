@@ -10,18 +10,19 @@ public class Stats {
 
     private int correct;
     private int incorrect;
-    private int completed;
     private int accuracy;
     private int gameScore;
     private Classic.Difficulty difficulty;
     private float time;
 
+    private boolean bonus;
+
     public Stats() {
         correct = 0;
         incorrect = 0;
-        completed = 0;
         gameScore = 0;
         time = 0;
+        bonus = true;
     }
 
     public void incTime(float dt) {
@@ -48,8 +49,12 @@ public class Stats {
         return gameScore;
     }
 
-    public int getCompleted() {
-        return completed;
+    public void setBonus(boolean b) {
+        bonus = b;
+    }
+
+    public boolean getBonusStatus() {
+        return bonus;
     }
 
     public void incrementCorrect() {
@@ -62,12 +67,15 @@ public class Stats {
 
     public int getAccuracy() {
         if (correct + incorrect == 0) return 0;
-        float calcPercent = (float) (correct / (correct + incorrect) * 100);
+        System.out.println("Correct: " + correct + ", Incorrect: " + incorrect);
+        int total = correct + incorrect;
+        float calcPercent;
+        calcPercent = (float) correct / total;
+        calcPercent *= 100;
+        System.out.println("Calc Percent: " + calcPercent);
         accuracy = MathUtils.round(calcPercent);
+        System.out.println(accuracy);
         return accuracy;
     }
 
-    public void incrementCompleted() {
-        completed++;
-    }
 }

@@ -128,6 +128,9 @@ public class Classic extends State {
                 tileTapped();
             } else if (skip.contains(tap.x, tap.y)) {
                 skip.setSelected(true);
+                if (stats.getBonusStatus()) {
+                    stats.setBonus(false);
+                }
                 nextLevel();
             }
         }
@@ -161,7 +164,6 @@ public class Classic extends State {
                 score.increment(incScore);
 
                 if (correct.size == solution.size) {
-                    stats.incrementCompleted();
                     nextLevel();
                 }
             } else {

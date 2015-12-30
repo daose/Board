@@ -14,7 +14,6 @@ import com.daose.board.states.MenuState;
 
 public class Board extends ApplicationAdapter {
 
-    //Desktop config setup
     public static final String TITLE = "Tappy Tiles";
     public static final int WIDTH = 480;
     public static final int HEIGHT = 800;
@@ -24,9 +23,12 @@ public class Board extends ApplicationAdapter {
 
     private Texture texture;
     private Texture score;
+    private Texture stamp;
 
     public static TextureRegion[] regions;
     public static TextureRegion[] numbers;
+    private static TextureRegion[] grades;
+    public static TextureRegion stampA, stampB, stampC, stampF;
 
     public static BitmapFont font32, font64, font128;
 
@@ -35,15 +37,25 @@ public class Board extends ApplicationAdapter {
 
         sb = new SpriteBatch();
         initText();
+        initImages();
 
+        gsm = new GSM();
+        gsm.push(new MenuState(gsm));
+    }
+
+    private void initImages() {
         texture = new Texture(Gdx.files.internal("blocks.png"));
         score = new Texture(Gdx.files.internal("score.png"));
+        stamp = new Texture(Gdx.files.internal("stamps.png"));
+        grades = new TextureRegion[4];
+        for (int i = 0; i < grades.length; i++) {
+            grades[i] = new TextureRegion(stamp, 0 + 300 * i, 0, 300, 300);
+        }
+        stampA = grades[0];
+        stampB = grades[1];
+        stampC = grades[2];
+        stampF = grades[3];
 
-
-         font128 = new BitmapFont(Gdx.files.internal("ubuntu128.fnt"));
-
-
-        font128.setColor(Color.DARK_GRAY);
         regions = new TextureRegion[2];
         regions[0] = new TextureRegion(texture, 0, 0, 2, 2);
         regions[1] = new TextureRegion(texture, 2, 0, 2, 2);
@@ -54,11 +66,11 @@ public class Board extends ApplicationAdapter {
         }
 
 
-        gsm = new GSM();
-        gsm.push(new MenuState(gsm));
     }
 
     private void initText() {
+        font128 = new BitmapFont(Gdx.files.internal("ubuntu128.fnt"));
+        font128.setColor(Color.DARK_GRAY);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Ubuntu-B.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 64;
