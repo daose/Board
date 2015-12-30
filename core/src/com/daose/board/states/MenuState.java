@@ -15,11 +15,12 @@ public class MenuState extends State {
         CLASSIC
     }
 
-    private Button classicButton;
+    private Button classicButton, scoreButton;
 
     public MenuState(GSM gsm){
         super(gsm);
         classicButton = new Button(Board.WIDTH / 2, Board.HEIGHT / 2 - 100, 300, 100);
+        scoreButton = new Button(Board.WIDTH / 2, Board.HEIGHT / 2 - 250, 250, 80);
     }
 
     public void handleInput() {
@@ -29,9 +30,13 @@ public class MenuState extends State {
             cam.unproject(tap);
             if(classicButton.contains(tap.x, tap.y)){
                 classicButton.setSelected(true);
+            } else if (scoreButton.contains(tap.x, tap.y)) {
+                scoreButton.setSelected(true);
             }
         } else if (classicButton.isSelected()) {
             gsm.set(new TransitionState(gsm, this, new DifficultyState(gsm, GameMode.CLASSIC), TransitionState.TransitionStyle.FADE));
+        } else if (scoreButton.isSelected()) {
+            gsm.set(new TransitionState(gsm, this, new ScoreState(gsm), TransitionState.TransitionStyle.FADE));
         }
     }
 
@@ -49,6 +54,10 @@ public class MenuState extends State {
         classicButton.render(sb);
         Board.font128.draw(sb, "Tappy Tiles", 40, Board.HEIGHT / 2 + 250, Board.WIDTH - 50, Align.center, true);
         classicButton.drawText(sb, "CLASSIC", 64);
+        sb.setColor(0.34f, 0.25f, 0.22f, 0.5f);
+        scoreButton.render(sb);
+        sb.setColor(1, 1, 1, 1);
+        scoreButton.drawText(sb, "HIGHSCORE", 32);
         sb.end();
     }
 }

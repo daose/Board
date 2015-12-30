@@ -17,7 +17,7 @@ public class StatsScreen extends State {
 
     private Stats stats;
     private Score finalScore;
-    private int inc;
+    private int inc, realScore;
     private float percentage, gradingScheme;
     private int accuracy;
     private char grade;
@@ -41,6 +41,7 @@ public class StatsScreen extends State {
         finalScore = new Score(Board.WIDTH / 2, Board.HEIGHT / 2 - 50);
         finalScore.setScore(stats.getGameScore());
         this.prev = prev;
+        realScore = finalScore.getScore();
 
         switch (stat.getDifficulty()) {
             case EASY:
@@ -48,11 +49,11 @@ public class StatsScreen extends State {
                 inc = 50;
                 break;
             case NORMAL:
-                gradingScheme = 700;
+                gradingScheme = 725;
                 inc = 100;
                 break;
             case HARD:
-                gradingScheme = 2000;
+                gradingScheme = 1500;
                 inc = 200;
                 break;
         }
@@ -75,12 +76,15 @@ public class StatsScreen extends State {
         if (bonus) {
             bonusDesc = new GlyphLayout(Board.font32, "no skips!");
             percentage = ((finalScore.getScore() + inc) / gradingScheme);
+            realScore += inc;
         } else {
             bonusDesc = new GlyphLayout(Board.font32, "none");
             percentage = (finalScore.getScore() / gradingScheme);
         }
 
+
         grade = calculateGrade();
+        saveScore();
 
         timeLine.setSelected(true);
         accuracyLine.setTimer(-0.25f);
@@ -88,6 +92,24 @@ public class StatsScreen extends State {
         bonusLine.setTimer(-0.5f);
         bonusLine.setSelected(true);
 
+    }
+
+    private void saveScore() {
+        switch (stats.getDifficulty()) {
+            case EASY:
+                if (Board.highScore.getInteger("classicEasy") < realScore)
+                    Board.highScore.putInteger("classicEasy", realScore);
+                break;
+            case NORMAL:
+                if (Board.highScore.getInteger("classicCasual") < realScore)
+                    Board.highScore.putInteger("classicCasual", realScore);
+                break;
+            case HARD:
+                if (Board.highScore.getInteger("classicHard") < realScore)
+                    Board.highScore.putInteger("classicHard", realScore);
+                break;
+        }
+        Board.highScore.flush();
     }
 
 

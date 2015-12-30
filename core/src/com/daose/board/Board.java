@@ -2,6 +2,7 @@ package com.daose.board;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -35,6 +36,8 @@ public class Board extends ApplicationAdapter {
 
     public static Sound tapped;
 
+    public static Preferences highScore;
+
 	public void create () {
         Gdx.gl.glClearColor(241f / 255, 242f / 255, 240f / 255, 1);
 
@@ -43,9 +46,23 @@ public class Board extends ApplicationAdapter {
         initImages();
 
         tapped = Gdx.audio.newSound(Gdx.files.internal("tapped.wav"));
+        initPrefs();
 
         gsm = new GSM();
         gsm.push(new MenuState(gsm));
+    }
+
+    private void initPrefs() {
+        highScore = Gdx.app.getPreferences("TappyTile");
+        if (!highScore.contains("classicEasy")) {
+            highScore.putInteger("classicEasy", 0);
+        }
+        if (!highScore.contains("classicCasual")) {
+            highScore.putInteger("classicCasual", 0);
+        }
+        if (!highScore.contains("classicHard")) {
+            highScore.putInteger("classicHard", 0);
+        }
     }
 
     private void initImages() {
@@ -54,7 +71,7 @@ public class Board extends ApplicationAdapter {
         stamp = new Texture(Gdx.files.internal("stamps.png"));
         grades = new TextureRegion[4];
         for (int i = 0; i < grades.length; i++) {
-            grades[i] = new TextureRegion(stamp, 0 + 300 * i, 0, 300, 300);
+            grades[i] = new TextureRegion(stamp, 300 * i, 0, 300, 300);
         }
         stampA = grades[0];
         stampB = grades[1];
@@ -98,4 +115,16 @@ public class Board extends ApplicationAdapter {
         gsm.update(Gdx.graphics.getDeltaTime());
         gsm.render(sb);
 	}
+
+    @Override
+    public void dispose() {
+        sb.dispose();
+        texture.dispose();
+        score.dispose();
+        stamp.dispose();
+        font32.dispose();
+        font64.dispose();
+        font128.dispose();
+        tapped.dispose();
+    }
 }

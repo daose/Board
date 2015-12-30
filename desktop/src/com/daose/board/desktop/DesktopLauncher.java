@@ -8,9 +8,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-        config.width = Board.WIDTH;
-        config.height = Board.HEIGHT;
-        config.title = Board.TITLE;
+		config.width = 480;
+		config.height = 800;
+		config.title = Board.TITLE;
 
 		new LwjglApplication(new Board(), config);
 	}
