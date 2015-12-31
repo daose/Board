@@ -73,7 +73,7 @@ public class TransitionState extends State {
             box.setProjectionMatrix(cam.combined);
             box.setColor(241f / 255, 242f / 255, 240f / 255, alpha);
             box.begin(ShapeRenderer.ShapeType.Filled);
-            box.rect(0, 0, Board.WIDTH, Board.HEIGHT);
+            box.rect(0, 0, Board.gameWidth, Board.gameHeight);
             box.end();
 
             Gdx.gl.glDisable(GL20.GL_BLEND);

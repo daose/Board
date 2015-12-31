@@ -20,7 +20,7 @@ public class ScoreState extends State {
     public ScoreState(GSM gsm) {
         super(gsm);
 
-        back = new Button(Board.WIDTH / 2, 100, 400, 100);
+        back = new Button(Board.gameWidth / 2, 100, 400, 100);
 
         easy = Board.highScore.getInteger("classicEasy");
         casual = Board.highScore.getInteger("classicCasual");
@@ -56,7 +56,7 @@ public class ScoreState extends State {
         sb.begin();
         back.render(sb);
         back.drawText(sb, "back", 64);
-        drawGlyph(sb, Board.WIDTH / 2, Board.HEIGHT - 100);
+        drawGlyph(sb, Board.gameWidth / 2, Board.gameHeight - 100);
         sb.end();
     }
 

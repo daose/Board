@@ -17,7 +17,7 @@ public abstract class State {
     protected State(GSM gsm){
         this.gsm = gsm;
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, Board.WIDTH, Board.HEIGHT);
+        cam.setToOrtho(false, Board.gameWidth, Board.gameHeight);
         tap = new Vector3();
     }
 

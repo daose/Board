@@ -63,10 +63,10 @@ public class Classic extends State {
         this.difficulty = difficulty;
         level = 1;
         boardInfo = new int[3];
-        score = new Score(Board.WIDTH / 2, Board.HEIGHT / 2 + 300);
+        score = new Score(Board.gameWidth / 2, Board.gameHeight / 2 + 300);
         stats = new Stats();
         stats.setDifficulty(difficulty);
-        skip = new Button(Board.WIDTH / 2, Board.HEIGHT / 2 - 300, 100, 50);
+        skip = new Button(Board.gameWidth / 2, Board.gameHeight / 2 - 300, 100, 50);
 
         //0 = size, 1 = solution size, 2 = number of levels
         getBoardInfo();
@@ -83,9 +83,9 @@ public class Classic extends State {
 
     private void createBoard(int size) {
         tiles = new Tile[size][size];
-        tileSize = Board.WIDTH / size;
+        tileSize = Board.gameWidth / size;
         boardHeight = tileSize * size;
-        boardOffset = (Board.HEIGHT - boardHeight) / 2;
+        boardOffset = (Board.gameHeight - boardHeight) / 2;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 tiles[row][col] = new Tile(
@@ -124,7 +124,7 @@ public class Classic extends State {
             tap.x = Gdx.input.getX();
             tap.y = Gdx.input.getY();
             cam.unproject(tap);
-            if ((tap.y > boardOffset) && (tap.y < (boardOffset + boardHeight)) && (tap.x > 0) && (tap.x < Board.WIDTH)) {
+            if ((tap.y > boardOffset) && (tap.y < (boardOffset + boardHeight)) && (tap.x > 0) && (tap.x < Board.gameWidth)) {
                 tileTapped();
             } else if (skip.contains(tap.x, tap.y)) {
                 skip.setSelected(true);

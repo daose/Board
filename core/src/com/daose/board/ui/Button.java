@@ -9,7 +9,7 @@ import com.daose.board.Board;
  */
 public class Button extends Tile {
 
-    public Button(int x, int y, int width, int height) {
+    public Button(float x, float y, float width, float height) {
         super(x, y, width, height);
     }
 
@@ -48,5 +48,14 @@ public class Button extends Tile {
 
     public float getHeight(){
         return height;
+    }
+
+    public Button[] createButtons(int num, float x, float y) {
+        Button[] buttons = new Button[num];
+        for (int i = 0; i < buttons.length; i++) {
+            float yPos = y / 2 / buttons.length / 2 + (i * y / 2 / buttons.length);
+            buttons[i] = new Button(x / 2, yPos, (3 / 4) * x, 100);
+        }
+        return buttons;
     }
 }

@@ -15,12 +15,30 @@ public class MenuState extends State {
         CLASSIC
     }
 
-    private Button classicButton, scoreButton;
+    private Button classicButton, highScoreButton;
+    private Button[] buttons;
+    private String title;
 
     public MenuState(GSM gsm){
         super(gsm);
-        classicButton = new Button(Board.WIDTH / 2, Board.HEIGHT / 2 - 100, 300, 100);
-        scoreButton = new Button(Board.WIDTH / 2, Board.HEIGHT / 2 - 250, 250, 80);
+
+        //Buttons span the bottom half of the screen
+        buttons = createButtons(2);
+        highScoreButton = buttons[0];
+        classicButton = buttons[1];
+
+        title = "Tappy Tiles";
+
+    }
+
+    private Button[] createButtons(int num) {
+        Button[] buttons = new Button[num];
+        for (int i = 0; i < buttons.length; i++) {
+            float yPos = Board.gameHeight / 2 / buttons.length / 2 + (i * Board.gameHeight / 2 / buttons.length);
+            buttons[i] = new Button(Board.gameWidth / 2, yPos, (3 * Board.gameWidth / 4), Board.gameHeight / 8);
+        }
+
+        return buttons;
     }
 
     public void handleInput() {
@@ -30,12 +48,12 @@ public class MenuState extends State {
             cam.unproject(tap);
             if(classicButton.contains(tap.x, tap.y)){
                 classicButton.setSelected(true);
-            } else if (scoreButton.contains(tap.x, tap.y)) {
-                scoreButton.setSelected(true);
+            } else if (highScoreButton.contains(tap.x, tap.y)) {
+                highScoreButton.setSelected(true);
             }
         } else if (classicButton.isSelected()) {
             gsm.set(new TransitionState(gsm, this, new DifficultyState(gsm, GameMode.CLASSIC), TransitionState.TransitionStyle.FADE));
-        } else if (scoreButton.isSelected()) {
+        } else if (highScoreButton.isSelected()) {
             gsm.set(new TransitionState(gsm, this, new ScoreState(gsm), TransitionState.TransitionStyle.FADE));
         }
     }
@@ -52,12 +70,12 @@ public class MenuState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         classicButton.render(sb);
-        Board.font128.draw(sb, "Tappy Tiles", 40, Board.HEIGHT / 2 + 250, Board.WIDTH - 50, Align.center, true);
+        Board.font128.draw(sb, title, 50, 7 * Board.gameHeight / 8, Board.gameWidth - 50, Align.center, true);
         classicButton.drawText(sb, "CLASSIC", 64);
         sb.setColor(0.34f, 0.25f, 0.22f, 0.5f);
-        scoreButton.render(sb);
+        highScoreButton.render(sb);
         sb.setColor(1, 1, 1, 1);
-        scoreButton.drawText(sb, "HIGHSCORE", 32);
+        highScoreButton.drawText(sb, "HIGHSCORE", 32);
         sb.end();
     }
 }
