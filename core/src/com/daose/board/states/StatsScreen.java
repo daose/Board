@@ -53,7 +53,7 @@ public class StatsScreen extends State {
                 inc = 100;
                 break;
             case HARD:
-                gradingScheme = 1500;
+                gradingScheme = 1600;
                 inc = 200;
                 break;
         }
