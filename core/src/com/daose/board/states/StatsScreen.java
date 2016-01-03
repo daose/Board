@@ -1,6 +1,7 @@
 package com.daose.board.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -61,8 +62,10 @@ public class StatsScreen extends State {
         totalTime = MathUtils.round(stats.getTotalTime());
         bonus = stats.getBonusStatus();
 
-        retry = new Button(Board.gameWidth / 4, 200, 200, 100);
-        menu = new Button(Board.gameWidth / 4, 95, 200, 100);
+        retry = new Button(Board.gameWidth / 4, Board.gameHeight / 5, Board.gameWidth / 3, Board.gameHeight / 8);
+        menu = new Button(Board.gameWidth / 4, Board.gameHeight / 10, Board.gameWidth / 3, Board.gameHeight / 8);
+        retry.setText("retry", Color.DARK_GRAY, 64);
+        menu.setText("menu", Color.DARK_GRAY, 64);
 
         timeElapsed = new GlyphLayout(Board.font32, "time elapsed: " + totalTime);
         timeLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 134, (int) (timeElapsed.width + 50), 10);
@@ -174,8 +177,8 @@ public class StatsScreen extends State {
         finalScore.render(sb);
         retry.render(sb);
         menu.render(sb);
-        retry.drawText(sb, "retry?", 64);
-        menu.drawText(sb, "menu", 64);
+        retry.drawText(sb);
+        menu.drawText(sb);
         if (showGrade) {
             switch (grade) {
                 case 'A':

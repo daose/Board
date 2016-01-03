@@ -69,7 +69,7 @@ public class Board extends ApplicationAdapter {
 
         //Font
         float small, medium, large;
-        small = (float) gameHeight / 20;
+        small = (float) gameHeight / 25;
         medium = (float) gameHeight / 10;
         large = (float) gameHeight / 6;
 
@@ -80,19 +80,19 @@ public class Board extends ApplicationAdapter {
         //Large Font
         FreetypeFontLoader.FreeTypeFontLoaderParameter largeParam = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         largeParam.fontFileName = "Ubuntu-B.ttf";
-        largeParam.fontParameters.color = Color.DARK_GRAY;
+        largeParam.fontParameters.color = Color.WHITE;
         largeParam.fontParameters.size = MathUtils.ceil(large);
         am.load("largeFont.ttf", BitmapFont.class, largeParam);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter medParam = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         medParam.fontFileName = "Ubuntu-B.ttf";
-        medParam.fontParameters.color = Color.DARK_GRAY;
+        medParam.fontParameters.color = Color.WHITE;
         medParam.fontParameters.size = MathUtils.ceil(medium);
         am.load("medFont.ttf", BitmapFont.class, medParam);
 
         FreetypeFontLoader.FreeTypeFontLoaderParameter smallParam = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         smallParam.fontFileName = "Ubuntu-B.ttf";
-        smallParam.fontParameters.color = Color.DARK_GRAY;
+        smallParam.fontParameters.color = Color.WHITE;
         smallParam.fontParameters.size = MathUtils.ceil(small);
         am.load("smallFont.ttf", BitmapFont.class, smallParam);
 

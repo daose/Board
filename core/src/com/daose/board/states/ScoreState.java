@@ -1,8 +1,10 @@
 package com.daose.board.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.daose.board.Board;
 import com.daose.board.ui.Button;
 
@@ -12,7 +14,6 @@ import com.daose.board.ui.Button;
 public class ScoreState extends State {
 
     private Button back;
-    private GlyphLayout highScoreText, easyText, casualText, hardText;
     private GlyphLayout[] text;
 
     private int easy, casual, hard;
@@ -20,17 +21,18 @@ public class ScoreState extends State {
     public ScoreState(GSM gsm) {
         super(gsm);
 
-        back = new Button(Board.gameWidth / 2, 100, 400, 100);
+        back = new Button(Board.gameWidth / 2, Board.gameHeight / 10, 3 * Board.gameWidth / 4, Board.gameHeight / 8);
+        back.setText("back", Color.DARK_GRAY, 32);
 
         easy = Board.highScore.getInteger("classicEasy");
         casual = Board.highScore.getInteger("classicCasual");
         hard = Board.highScore.getInteger("classicHard");
 
         text = new GlyphLayout[4];
-        text[0] = highScoreText = new GlyphLayout(Board.font64, "HIGH SCORES");
-        text[1] = easyText = new GlyphLayout(Board.font32, "Easy: " + easy);
-        text[2] = casualText = new GlyphLayout(Board.font32, "Casual: " + casual);
-        text[3] = hardText = new GlyphLayout(Board.font32, "Hard: " + hard);
+        text[0] = new GlyphLayout(Board.font64, "HIGH SCORES", Color.DARK_GRAY, Board.gameWidth, Align.center, true);
+        text[1] = new GlyphLayout(Board.font32, "Easy: " + easy, Color.DARK_GRAY, Board.gameWidth, Align.center, true);
+        text[2] = new GlyphLayout(Board.font32, "Casual: " + casual, Color.DARK_GRAY, Board.gameWidth, Align.center, true);
+        text[3] = new GlyphLayout(Board.font32, "Hard: " + hard, Color.DARK_GRAY, Board.gameWidth, Align.center, true);
 
     }
 
@@ -55,18 +57,16 @@ public class ScoreState extends State {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         back.render(sb);
-        back.drawText(sb, "back", 64);
-        drawGlyph(sb, Board.gameWidth / 2, Board.gameHeight - 100);
+        back.drawText(sb);
+        drawGlyph(sb, Board.gameHeight);
         sb.end();
     }
 
-    private void drawGlyph(SpriteBatch sb, float x, float y) {
-        for (int i = 0; i < text.length; i++) {
-            if (i == 0)
-                Board.font64.draw(sb, text[i], x - text[i].width / 2, y - (75 * i));
-            else
-                Board.font32.draw(sb, text[i], x - text[i].width / 2, y - 100 - (75 * i));
-        }
+    private void drawGlyph(SpriteBatch sb, float y) {
+        Board.font64.draw(sb, text[0], 0, y - Board.gameHeight / 10);
+        Board.font32.draw(sb, text[1], 0, y - (Board.gameHeight / 4) - (Board.gameHeight / 10));
+        Board.font32.draw(sb, text[2], 0, y - (Board.gameHeight / 4) - 2 * (Board.gameHeight / 10));
+        Board.font32.draw(sb, text[3], 0, y - (Board.gameHeight / 4) - 3 * (Board.gameHeight / 10));
     }
 
     public void dispose() {

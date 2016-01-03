@@ -1,6 +1,7 @@
 package com.daose.board.states.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -45,6 +46,7 @@ public class Classic extends State {
     private int[] boardInfo;
 
     private Score score;
+    private int pitchIncrement;
     private int completeBonus;
 
     private float scoreTimer;
@@ -63,10 +65,8 @@ public class Classic extends State {
         this.difficulty = difficulty;
         level = 1;
         boardInfo = new int[3];
-        score = new Score(Board.gameWidth / 2, Board.gameHeight / 2 + 300);
         stats = new Stats();
         stats.setDifficulty(difficulty);
-        skip = new Button(Board.gameWidth / 2, Board.gameHeight / 2 - 300, 100, 50);
 
         //0 = size, 1 = solution size, 2 = number of levels
         getBoardInfo();
@@ -74,12 +74,15 @@ public class Classic extends State {
         createBoard(boardInfo[0]);
         createSolution(boardInfo[1]);
 
+        score = new Score(Board.gameWidth / 2, boardOffset + boardHeight + Board.gameHeight / 10);
+        skip = new Button(Board.gameWidth / 2, boardOffset - Board.gameHeight / 10, Board.gameWidth / 5, Board.gameHeight / 20);
+        skip.setText("skip", Color.DARK_GRAY, 32);
+
     }
 
     public void dispose() {
 
     }
-
 
     private void createBoard(int size) {
         tiles = new Tile[size][size];
@@ -92,6 +95,7 @@ public class Classic extends State {
                         col * tileSize + tileSize / 2,
                         row * tileSize + boardOffset + tileSize / 2,
                         tileSize, tileSize);
+                //tiles[row][col].setTimer(-0.15f);
             }
         }
         setTileTimer();
@@ -117,6 +121,8 @@ public class Classic extends State {
         solution.clear();
         selected.clear();
         correct.clear();
+
+        pitchIncrement = 2 / boardInfo[0];
     }
 
     public void handleInput() {
@@ -124,7 +130,10 @@ public class Classic extends State {
             tap.x = Gdx.input.getX();
             tap.y = Gdx.input.getY();
             cam.unproject(tap);
-            if ((tap.y > boardOffset) && (tap.y < (boardOffset + boardHeight)) && (tap.x > 0) && (tap.x < Board.gameWidth)) {
+            if (
+                    (tap.y > boardOffset) &&
+                            (tap.y < (boardOffset + boardHeight)) &&
+                            (tap.x > 0) && (tap.x < Board.gameWidth)) {
                 tileTapped();
             } else if (skip.contains(tap.x, tap.y)) {
                 skip.setSelected(true);
@@ -157,9 +166,9 @@ public class Classic extends State {
             selected.add(tiles[row][col]);
             tiles[row][col].setSelected(true);
             if (solution.contains(tiles[row][col], true)) {
-                Board.tapped.play();
                 stats.incrementCorrect();
                 correct.add(tiles[row][col]);
+                Board.tapped.play(1, correct.size * pitchIncrement, 1);
                 int incScore = (int) (5 * scoreTimer);
                 score.increment(incScore);
 
@@ -217,7 +226,7 @@ public class Classic extends State {
         sb.setColor(247f / 255, 200f / 255, 212f / 255, 1);
         skip.render(sb);
         sb.setColor(1, 1, 1, 1);
-        skip.drawText(sb, "skip", 32);
+        skip.drawText(sb);
         score.render(sb);
         sb.end();
     }
@@ -297,31 +306,34 @@ public class Classic extends State {
             row = middleRow - i;
             col = middleCol - i;
             for (j = 0; j < (2 * i) + 1; j++) {
-                tiles[row][col].setTimer(myFunc(i));
-                if ((j + 1) < (2 * i) + 1) col++;
+                tiles[row][col].setTimer(myFunc(i + j));
+                if ((j + 1) < (2 * i) + 1) {
+                    col++;
+                }
             }
             //Right column (bottom -> top)
             row++;
             for (j = 0; j < (2 * i); j++) {
-                tiles[row][col].setTimer(myFunc(i));
+                tiles[row][col].setTimer(myFunc(i + j));
                 if (j < (2 * i) - 1) row++;
             }
             //Top Row (left <- right)
             col--;
             for (j = 0; j < (2 * i); j++) {
-                tiles[row][col].setTimer(myFunc(i));
+                tiles[row][col].setTimer(myFunc(i + j));
                 if (j < (2 * i) - 1) col--;
             }
             //Left column (top -> bottom)
             row--;
             for (j = 0; j < (2 * i); j++) {
-                tiles[row][col].setTimer(myFunc(i));
+                tiles[row][col].setTimer(myFunc(i + j));
                 if (j < (2 * i) - 1) row--;
             }
         }
     }
 
     private float myFunc(int i) {
-        return (float) -0.15 * i;
+        float num = (float) -0.10 * i;
+        return num;
     }
 }
