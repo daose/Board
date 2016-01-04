@@ -74,7 +74,7 @@ public class Classic extends State {
         createBoard(boardInfo[0]);
         createSolution(boardInfo[1]);
 
-        score = new Score(Board.gameWidth / 2, boardOffset + boardHeight + Board.gameHeight / 10);
+        score = new Score();
         skip = new Button(Board.gameWidth / 2, boardOffset - Board.gameHeight / 10, Board.gameWidth / 5, Board.gameHeight / 20);
         skip.setText("skip", Color.DARK_GRAY, 32);
 

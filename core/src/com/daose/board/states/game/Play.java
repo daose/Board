@@ -2,14 +2,13 @@ package com.daose.board.states.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import com.daose.board.Board;
 import com.daose.board.states.GSM;
 import com.daose.board.states.MenuState;
 import com.daose.board.states.State;
 import com.daose.board.ui.Grid;
+import com.daose.board.ui.Score;
 
 /**
  * Created by student on 01/01/16.
@@ -22,8 +21,7 @@ public class Play extends State {
     private int boardCompleted;
     private float scoreYPos;
 
-    private GlyphLayout score;
-    private Color scoreColor;
+    private Score score;
 
     private Color tint;
     private int colour;
@@ -31,43 +29,58 @@ public class Play extends State {
     public Play(GSM gsm) {
         super(gsm);
 
-        tint = new Color(52f / 255, 152f / 255, 219f / 255, 1);
-        scoreColor = new Color(52f / 255, 152f / 255, 219f / 255, 1);
+        tint = new Color(1, 1, 1, 1);
+        info = new int[3];
+
         playInfo();
 
         grid = new Grid();
-        grid.create(3, 3, 2, Grid.TileAnimation.CIRCLE_IN);
+        grid.create(info[0], info[1], info[2], Grid.TileAnimation.CIRCLE_IN);
         boardCompleted = 0;
-        info = new int[3];
 
-
-        score = new GlyphLayout(Board.font64, "0", scoreColor, Board.gameWidth, Align.center, true);
-        scoreYPos = Board.gameHeight - ((Board.gameHeight - grid.getHeight()) / 2) + score.height / 2;
+        score = new Score();
+        scoreYPos = Board.gameHeight - ((Board.gameHeight - grid.getHeight()) / 2) + score.getLayout().height / 2;
+        score.setYPos(scoreYPos);
     }
 
     private void playInfo() {
-        info = new int[3];
 
-        colourWheel();
-        Gdx.app.log("Board completed", Integer.toString(boardCompleted % 5));
+        if (boardCompleted % 5 == 1 && boardCompleted > 1) {
+            info[0] -= 2;
+            info[1] -= 4;
+            info[2] -= 3;
+            return;
+        }
+
+        if (boardCompleted % 5 == 0 && boardCompleted > 0) {
+            info[0] += 2;
+            info[1] += 4;
+            info[2] += 3;
+            colourWheel();
+            return;
+        }
+
+        info[0] = 5;
+        info[1] = 6;
+        info[2] = 2;
     }
 
     private void colourWheel() {
         switch (colour % 5) {
             case 0:
-                tint.set(scoreColor);
+                tint.set(1, 1, 1, 1);
                 break;
             case 1:
-                tint.set(231f / 255, 76f / 255, 60f / 255, 1);
+                tint.set(197f / 255, 225f / 255, 165f / 255, 1);
                 break;
             case 2:
-                tint.set(115f / 255, 89f / 255, 182f / 255, 1);
+                tint.set(192f / 255, 164f / 255, 224f / 255, 1);
                 break;
             case 3:
-                tint.set(26f / 255, 188f / 255, 156f / 255, 1);
+                tint.set(255f / 255, 224f / 255, 130f / 255, 1);
                 break;
             case 4:
-                tint.set(46f / 255, 204f / 255, 113f / 255, 1);
+                tint.set(178f / 255, 223f / 255, 219f / 255, 1);
                 break;
         }
         colour++;
@@ -85,10 +98,10 @@ public class Play extends State {
                 }
                 if (grid.getCorrectSize() == grid.getSolutionSize()) {
                     boardCompleted++;
-                    score.setText(Board.font64, Integer.toString(boardCompleted), scoreColor, Board.gameWidth, Align.center, true);
+                    score.increment(1);
                     grid.reset();
                     playInfo();
-                    grid.create(3, 3, 2, Grid.TileAnimation.CIRCLE_IN);
+                    grid.create(info[0], info[1], info[2], Grid.TileAnimation.CIRCLE_IN);
 
                 }
             }
@@ -107,7 +120,7 @@ public class Play extends State {
         sb.setColor(tint);
         grid.render(sb);
         sb.setColor(1, 1, 1, 1);
-        Board.font64.draw(sb, score, 0, scoreYPos);
+        score.render(sb);
         sb.end();
 
     }
