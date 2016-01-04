@@ -24,9 +24,9 @@ public class Tile {
     //Tile textures
     protected TextureRegion light, dark;
 
-    public Tile(int x, int y, int width, int height) {
+    public Tile(float x, float y, float width, float height) {
 
-        int border = 8;
+        int border = Board.gameWidth / 60;
         this.x = x;
         this.y = y;
         this.currentWidth = 0;
@@ -35,10 +35,10 @@ public class Tile {
         this.height = height - border;
         timer = 0;
         selected = false;
-        animationTime = 0.5f;
+        animationTime = 0.4f;
 
-        dark = Board.regions[0];
-        light = Board.regions[1];
+        dark = Board.tileTexture[0];
+        light = Board.tileTexture[1];
 
     }
 

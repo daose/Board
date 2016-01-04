@@ -1,6 +1,9 @@
 package com.daose.board.ui;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.daose.board.Board;
 
 /**
@@ -8,21 +11,29 @@ import com.daose.board.Board;
  */
 public class Score {
 
-    private int x, y, score, width, height, incremented;
+    private int score, incremented;
+    private float yPos;
+
+    private GlyphLayout scoreLayout;
     private String scoreText;
 
     private float timer;
     private float animationTime;
 
-    public Score(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Score() {
+        scoreLayout = new GlyphLayout(Board.font64, "0", new Color(52f / 255, 152f / 255, 219f / 255, 1), Board.gameWidth, Align.center, true);
         score = 0;
         scoreText = "0";
-        height = 53;
-        width = 40;
         animationTime = 0.5f;
         timer = 1;
+    }
+
+    public GlyphLayout getLayout() {
+        return scoreLayout;
+    }
+
+    public void setYPos(float yPos) {
+        this.yPos = yPos;
     }
 
     public void increment(int inc) {
@@ -38,7 +49,7 @@ public class Score {
     public void setScore(int newScore) {
         score = newScore;
         scoreText = Integer.toString(score);
-        width = 40 * scoreText.length();
+        scoreLayout.setText(Board.font64, scoreText, Color.BLACK, Board.gameWidth, Align.center, true);
     }
 
     public int getScore() {
@@ -54,28 +65,23 @@ public class Score {
 
     public void render(SpriteBatch sb) {
         drawScore(sb);
-        drawIncremented(sb);
+        //drawIncremented(sb);
     }
 
     private void drawScore(SpriteBatch sb) {
-        for (int i = 0; i < scoreText.length(); i++) {
-            char c = scoreText.charAt(i);
-            c -= '0';
-            int index = (int) c;
-            sb.draw(Board.numbers[index], (x - width / 2) + (40 * i), y - height / 2);
-        }
+        Board.font64.draw(sb, scoreLayout, 0, yPos);
     }
 
     private void drawIncremented(SpriteBatch sb) {
-        float yPos;
         if (incremented > 0) {
             sb.setColor(0, 1, 0, (1 - timer / animationTime));
-            yPos = y + (timer * 50);
+            yPos += (timer * 50);
         } else {
             sb.setColor(1, 0, 0, (1 - timer / animationTime));
-            yPos = y - (timer * 50);
+            yPos += (timer * 50);
         }
         String incrementedText = Integer.toString(Math.abs(incremented));
+        /************
         for (int i = 0; i < incrementedText.length(); i++) {
             char c = incrementedText.charAt(i);
             c -= '0';
@@ -83,6 +89,7 @@ public class Score {
             sb.draw(Board.numbers[index],
                     (x + width / 2) + 10 + (20 * i), yPos, 20, 26);
         }
+         **************/
         sb.setColor(1, 1, 1, 1);
     }
 }

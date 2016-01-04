@@ -1,6 +1,7 @@
 package com.daose.board.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -38,14 +39,14 @@ public class StatsScreen extends State {
         this.stats = stat;
         showInfo = showBonus = showGrade = bonus = false;
         toIncrement = true;
-        finalScore = new Score(Board.WIDTH / 2, Board.HEIGHT / 2 - 50);
+        finalScore = new Score();
         finalScore.setScore(stats.getGameScore());
         this.prev = prev;
         realScore = finalScore.getScore();
 
         switch (stat.getDifficulty()) {
             case EASY:
-                gradingScheme = 285;
+                gradingScheme = 250;
                 inc = 50;
                 break;
             case NORMAL:
@@ -61,17 +62,19 @@ public class StatsScreen extends State {
         totalTime = MathUtils.round(stats.getTotalTime());
         bonus = stats.getBonusStatus();
 
-        retry = new Button(Board.WIDTH / 4, 200, 200, 100);
-        menu = new Button(Board.WIDTH / 4, 95, 200, 100);
+        retry = new Button(Board.gameWidth / 4, Board.gameHeight / 5, Board.gameWidth / 3, Board.gameHeight / 8);
+        menu = new Button(Board.gameWidth / 4, Board.gameHeight / 10, Board.gameWidth / 3, Board.gameHeight / 8);
+        retry.setText("retry", Color.DARK_GRAY, 64);
+        menu.setText("menu", Color.DARK_GRAY, 64);
 
         timeElapsed = new GlyphLayout(Board.font32, "time elapsed: " + totalTime);
-        timeLine = new Tile(Board.WIDTH / 2, Board.HEIGHT - 134, (int) (timeElapsed.width + 50), 10);
+        timeLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 134, (int) (timeElapsed.width + 50), 10);
 
         accuracyText = new GlyphLayout(Board.font32, "accuracy: " + accuracy + "%");
-        accuracyLine = new Tile(Board.WIDTH / 2, Board.HEIGHT - 209, (int) (accuracyText.width + 50), 10);
+        accuracyLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 209, (int) (accuracyText.width + 50), 10);
 
         bonusText = new GlyphLayout(Board.font32, "BONUS");
-        bonusLine = new Tile(Board.WIDTH / 2, Board.HEIGHT - 284, (int) (bonusText.width + 50), 10);
+        bonusLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 284, (int) (bonusText.width + 50), 10);
 
         if (bonus) {
             bonusDesc = new GlyphLayout(Board.font32, "no skips!");
@@ -174,23 +177,9 @@ public class StatsScreen extends State {
         finalScore.render(sb);
         retry.render(sb);
         menu.render(sb);
-        retry.drawText(sb, "retry?", 64);
-        menu.drawText(sb, "menu", 64);
-        if (showGrade) {
-            switch (grade) {
-                case 'A':
-                    sb.draw(Board.stampA, Board.WIDTH / 2, -50);
-                    break;
-                case 'B':
-                    sb.draw(Board.stampB, Board.WIDTH / 2, -50);
-                    break;
-                case 'C':
-                    sb.draw(Board.stampC, Board.WIDTH / 2, -50);
-                    break;
-                case 'F':
-                    sb.draw(Board.stampF, Board.WIDTH / 2, -50);
-            }
-        }
+        retry.drawText(sb);
+        menu.drawText(sb);
+
 
         if (showLine) {
             timeLine.render(sb);
@@ -199,12 +188,28 @@ public class StatsScreen extends State {
         }
 
         if (showInfo) {
-            Board.font32.draw(sb, timeElapsed, Board.WIDTH / 2 - timeElapsed.width / 2, Board.HEIGHT - 100);
-            Board.font32.draw(sb, accuracyText, Board.WIDTH / 2 - accuracyText.width / 2, Board.HEIGHT - 175);
+            Board.font32.draw(sb, timeElapsed, Board.gameWidth / 2 - timeElapsed.width / 2, Board.gameHeight - 100);
+            Board.font32.draw(sb, accuracyText, Board.gameWidth / 2 - accuracyText.width / 2, Board.gameHeight - 175);
         }
         if (showBonus) {
-            Board.font32.draw(sb, bonusText, Board.WIDTH / 2 - bonusText.width / 2, Board.HEIGHT - 250);
-            Board.font32.draw(sb, bonusDesc, Board.WIDTH / 2 - bonusDesc.width / 2, Board.HEIGHT - 290);
+            Board.font32.draw(sb, bonusText, Board.gameWidth / 2 - bonusText.width / 2, Board.gameHeight - 250);
+            Board.font32.draw(sb, bonusDesc, Board.gameWidth / 2 - bonusDesc.width / 2, Board.gameHeight - 290);
+        }
+
+        if (showGrade) {
+            switch (grade) {
+                case 'A':
+                    sb.draw(Board.stampA, Board.gameWidth / 2 - Board.gameWidth / 3, Board.gameHeight / 2, 2 * Board.gameWidth / 3, 2 * Board.gameWidth / 3);
+                    break;
+                case 'B':
+                    sb.draw(Board.stampB, Board.gameWidth / 2, -50);
+                    break;
+                case 'C':
+                    sb.draw(Board.stampC, Board.gameWidth / 2, -50);
+                    break;
+                case 'F':
+                    sb.draw(Board.stampF, Board.gameWidth / 2, -50);
+            }
         }
 
         sb.end();
