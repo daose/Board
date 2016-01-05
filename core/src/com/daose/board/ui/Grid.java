@@ -21,6 +21,8 @@ public class Grid {
     private boolean isShowing;
     private Tile[][] tiles;
 
+    private float pitch;
+
     private Array<Tile> solutionList;
     private Array<Tile> selectedList;
     private Array<Tile> correctList;
@@ -39,6 +41,8 @@ public class Grid {
         tileSize = Board.gameWidth / length;
         boardHeight = tileSize * length;
         boardOffset = (Board.gameHeight - boardHeight) / 2;
+
+        pitch = 0.5f;
 
         for (int row = 0; row < length; row++) {
             for (int col = 0; col < length; col++) {
@@ -121,6 +125,18 @@ public class Grid {
         }
     }
 
+    public void showSolution(boolean b) {
+        if (b) {
+            for (int i = 0; i < solutionList.size; i++) {
+                solutionList.get(i).setShowAnswer(true);
+            }
+        } else {
+            for (int i = 0; i < solutionList.size; i++) {
+                solutionList.get(i).setShowAnswer(false);
+            }
+        }
+    }
+
     public void reset() {
         solutionList.clear();
         selectedList.clear();
@@ -156,7 +172,8 @@ public class Grid {
             selectedList.add(tiles[row][col]);
             if (solutionList.contains(tiles[row][col], true)) {
                 correctList.add(tiles[row][col]);
-                Board.tapped.play(1.0f);
+                Board.tapped.play(1.0f, pitch, 1);
+                pitch += 0.05;
             } else {
                 Board.tapped.play(1, 0.8f, 1);
             }

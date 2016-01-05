@@ -17,6 +17,7 @@ public class Tile {
     protected float currentWidth;
     protected float currentHeight;
     protected boolean selected;
+    protected boolean showAnswer;
 
     private float timer;
     private float animationTime;
@@ -60,11 +61,19 @@ public class Tile {
 
     //(x, y) is center
     public void render(SpriteBatch sb) {
-        if (selected) {
+        if (showAnswer) {
+            sb.setColor(0, 1, 0, 1);
+            sb.draw(dark, (x - currentWidth / 2), (y - currentHeight / 2), currentWidth, currentHeight);
+            sb.setColor(1, 1, 1, 1);
+        } else if (selected) {
             sb.draw(dark, (x - currentWidth / 2), (y - currentHeight / 2), currentWidth, currentHeight);
         } else {
             sb.draw(light, (x - currentWidth / 2), (y - currentHeight / 2), currentWidth, currentHeight);
         }
+    }
+
+    public void setShowAnswer(boolean b) {
+        showAnswer = b;
     }
 
     public void setSelected(boolean b) {

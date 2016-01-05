@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.daose.board.Board;
+import com.daose.board.states.EndGameState;
 import com.daose.board.states.GSM;
-import com.daose.board.states.MenuState;
 import com.daose.board.states.State;
+import com.daose.board.states.TransitionState;
 import com.daose.board.ui.Grid;
 import com.daose.board.ui.Score;
 
@@ -26,11 +27,18 @@ public class Play extends State {
     private Color tint;
     private int colour;
 
+    private float solutionTimer;
+    private boolean showSolution;
+
     public Play(GSM gsm) {
         super(gsm);
 
         tint = new Color(1, 1, 1, 1);
         info = new int[3];
+
+        colour = 1;
+        solutionTimer = 1;
+        showSolution = false;
 
         playInfo();
 
@@ -87,14 +95,14 @@ public class Play extends State {
     }
 
     public void handleInput() {
-        if (Gdx.input.justTouched() && !grid.isShowing()) {
+        if (Gdx.input.justTouched() && !grid.isShowing() && !showSolution) {
             tap.x = Gdx.input.getX();
             tap.y = Gdx.input.getY();
             cam.unproject(tap);
             if (grid.contains(tap.x, tap.y)) {
                 grid.tileTapped(tap.x, tap.y);
                 if (grid.getSelectedSize() > grid.getCorrectSize()) {
-                    gsm.set(new MenuState(gsm));
+                    showSolution = true;
                 }
                 if (grid.getCorrectSize() == grid.getSolutionSize()) {
                     boardCompleted++;
@@ -102,7 +110,6 @@ public class Play extends State {
                     grid.reset();
                     playInfo();
                     grid.create(info[0], info[1], info[2], Grid.TileAnimation.CIRCLE_IN);
-
                 }
             }
         }
@@ -111,6 +118,15 @@ public class Play extends State {
     public void update(float dt) {
         handleInput();
         grid.update(dt);
+        if (showSolution) {
+            grid.showSolution(true);
+            if (solutionTimer > 0) {
+                solutionTimer -= dt;
+            } else {
+                showSolution = false;
+                gsm.set(new TransitionState(gsm, this, new EndGameState(gsm, this, score), TransitionState.TransitionStyle.FADE));
+            }
+        }
     }
 
     public void render(SpriteBatch sb) {

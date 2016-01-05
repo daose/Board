@@ -16,12 +16,14 @@ public class Score {
 
     private GlyphLayout scoreLayout;
     private String scoreText;
+    private Color scoreColor;
 
     private float timer;
     private float animationTime;
 
     public Score() {
-        scoreLayout = new GlyphLayout(Board.font64, "0", new Color(52f / 255, 152f / 255, 219f / 255, 1), Board.gameWidth, Align.center, true);
+        scoreColor = new Color(105f / 255, 204f / 255, 237f / 255, 1);
+        scoreLayout = new GlyphLayout(Board.font64, "0", scoreColor, Board.gameWidth, Align.center, true);
         score = 0;
         scoreText = "0";
         animationTime = 0.5f;
@@ -49,7 +51,7 @@ public class Score {
     public void setScore(int newScore) {
         score = newScore;
         scoreText = Integer.toString(score);
-        scoreLayout.setText(Board.font64, scoreText, Color.BLACK, Board.gameWidth, Align.center, true);
+        scoreLayout.setText(Board.font64, scoreText, scoreColor, Board.gameWidth, Align.center, true);
     }
 
     public int getScore() {

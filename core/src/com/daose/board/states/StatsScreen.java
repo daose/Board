@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.daose.board.Board;
 import com.daose.board.helper.Stats;
 import com.daose.board.ui.Button;
@@ -23,7 +22,7 @@ public class StatsScreen extends State {
     private int accuracy;
     private char grade;
     private State prev;
-    private int totalTime;
+    private float totalTime;
 
     private Tile timeLine, accuracyLine, bonusLine;
 
@@ -59,11 +58,11 @@ public class StatsScreen extends State {
                 break;
         }
         accuracy = stats.getAccuracy();
-        totalTime = MathUtils.round(stats.getTotalTime());
+        totalTime = stats.getTotalTime();
         bonus = stats.getBonusStatus();
 
-        retry = new Button(Board.gameWidth / 4, Board.gameHeight / 5, Board.gameWidth / 3, Board.gameHeight / 8);
-        menu = new Button(Board.gameWidth / 4, Board.gameHeight / 10, Board.gameWidth / 3, Board.gameHeight / 8);
+        retry = new Button(Board.gameWidth / 2, Board.gameHeight / 5, Board.gameWidth / 2, Board.gameHeight / 8);
+        menu = new Button(Board.gameWidth / 2, Board.gameHeight / 10, Board.gameWidth / 2, Board.gameHeight / 8);
         retry.setText("retry", Color.DARK_GRAY, 64);
         menu.setText("menu", Color.DARK_GRAY, 64);
 
