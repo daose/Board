@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.daose.board.Board;
 import com.daose.board.helper.Stats;
 import com.daose.board.ui.Button;
 import com.daose.board.ui.Score;
-import com.daose.board.ui.Tile;
 
 /**
  * Created by student on 28/12/15.
@@ -24,10 +24,8 @@ public class StatsScreen extends State {
     private State prev;
     private float totalTime;
 
-    private Tile timeLine, accuracyLine, bonusLine;
-
     private float timer;
-    private boolean showInfo, showBonus, showGrade, showLine, toIncrement, bonus;
+    private boolean showInfo, showBonus, showGrade, toIncrement, bonus;
 
     private Button retry, menu;
 
@@ -40,6 +38,7 @@ public class StatsScreen extends State {
         toIncrement = true;
         finalScore = new Score();
         finalScore.setScore(stats.getGameScore());
+        finalScore.setYPos(Board.gameHeight / 2);
         this.prev = prev;
         realScore = finalScore.getScore();
 
@@ -62,37 +61,28 @@ public class StatsScreen extends State {
         bonus = stats.getBonusStatus();
 
         retry = new Button(Board.gameWidth / 2, Board.gameHeight / 5, Board.gameWidth / 2, Board.gameHeight / 8);
-        menu = new Button(Board.gameWidth / 2, Board.gameHeight / 10, Board.gameWidth / 2, Board.gameHeight / 8);
+        menu = new Button(Board.gameWidth / 2, Board.gameHeight / 11, Board.gameWidth / 2, Board.gameHeight / 8);
         retry.setText("retry", Color.DARK_GRAY, 64);
         menu.setText("menu", Color.DARK_GRAY, 64);
 
-        timeElapsed = new GlyphLayout(Board.font32, "time elapsed: " + totalTime);
-        timeLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 134, (int) (timeElapsed.width + 50), 10);
+        timeElapsed = new GlyphLayout(Board.font32, "time elapsed: " + totalTime, Color.DARK_GRAY, Board.gameWidth, Align.center, true);
 
-        accuracyText = new GlyphLayout(Board.font32, "accuracy: " + accuracy + "%");
-        accuracyLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 209, (int) (accuracyText.width + 50), 10);
+        accuracyText = new GlyphLayout(Board.font32, "accuracy: " + accuracy + "%", Color.DARK_GRAY, Board.gameWidth, Align.center, true);
 
-        bonusText = new GlyphLayout(Board.font32, "BONUS");
-        bonusLine = new Tile(Board.gameWidth / 2, Board.gameHeight - 284, (int) (bonusText.width + 50), 10);
+        bonusText = new GlyphLayout(Board.font32, "BONUS", Color.DARK_GRAY, Board.gameWidth, Align.center, true);
 
         if (bonus) {
-            bonusDesc = new GlyphLayout(Board.font32, "no skips!");
+            bonusDesc = new GlyphLayout(Board.font32, "no skips!", Color.DARK_GRAY, Board.gameWidth, Align.center, true);
             percentage = ((finalScore.getScore() + inc) / gradingScheme);
             realScore += inc;
         } else {
-            bonusDesc = new GlyphLayout(Board.font32, "none");
+            bonusDesc = new GlyphLayout(Board.font32, "none", Color.DARK_GRAY, Board.gameWidth, Align.center, true);
             percentage = (finalScore.getScore() / gradingScheme);
         }
 
 
         grade = calculateGrade();
         saveScore();
-
-        timeLine.setSelected(true);
-        accuracyLine.setTimer(-0.25f);
-        accuracyLine.setSelected(true);
-        bonusLine.setTimer(-0.5f);
-        bonusLine.setSelected(true);
 
     }
 
@@ -145,18 +135,13 @@ public class StatsScreen extends State {
     }
 
     public void update(float dt) {
-        if (timer < 4) {
+        if (timer < 2) {
             timer += dt;
         }
         if (timer > 0.5) {
-            showLine = true;
-            timeLine.update(dt);
-            accuracyLine.update(dt);
-            bonusLine.update(dt);
-        }
-        if (timer > 1.5)
             showInfo = true;
-        if (timer > 2) {
+        }
+        if (timer > 1) {
             showBonus = true;
             finalScore.update(dt);
             if (toIncrement && bonus) {
@@ -164,7 +149,7 @@ public class StatsScreen extends State {
                 toIncrement = false;
             }
         }
-        if (timer > 3.5) {
+        if (timer > 1.5) {
             showGrade = true;
         }
         handleInput();
@@ -173,43 +158,37 @@ public class StatsScreen extends State {
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
+        if (showGrade) {
+            switch (grade) {
+                case 'A':
+                    sb.draw(Board.stampA, Board.gameWidth / 2 - Board.gameWidth / 4, Board.gameHeight / 2, Board.gameWidth / 2, Board.gameWidth / 2);
+                    break;
+                case 'B':
+                    sb.draw(Board.stampB, Board.gameWidth / 2 - Board.gameWidth / 4, Board.gameHeight / 2, Board.gameWidth / 2, Board.gameWidth / 2);
+                    break;
+                case 'C':
+                    sb.draw(Board.stampC, Board.gameWidth / 2 - Board.gameWidth / 4, Board.gameHeight / 2, Board.gameWidth / 2, Board.gameWidth / 2);
+                    break;
+                case 'F':
+                    sb.draw(Board.stampF, Board.gameWidth / 2 - Board.gameWidth / 4, Board.gameHeight / 2, Board.gameWidth / 2, Board.gameWidth / 2);
+                    break;
+            }
+        }
         finalScore.render(sb);
         retry.render(sb);
         menu.render(sb);
         retry.drawText(sb);
         menu.drawText(sb);
 
-
-        if (showLine) {
-            timeLine.render(sb);
-            accuracyLine.render(sb);
-            bonusLine.render(sb);
-        }
-
         if (showInfo) {
-            Board.font32.draw(sb, timeElapsed, Board.gameWidth / 2 - timeElapsed.width / 2, Board.gameHeight - 100);
-            Board.font32.draw(sb, accuracyText, Board.gameWidth / 2 - accuracyText.width / 2, Board.gameHeight - 175);
+            Board.font32.draw(sb, timeElapsed, 0, 9 * Board.gameHeight / 10);
+            Board.font32.draw(sb, accuracyText, 0, 8 * Board.gameHeight / 10);
         }
         if (showBonus) {
-            Board.font32.draw(sb, bonusText, Board.gameWidth / 2 - bonusText.width / 2, Board.gameHeight - 250);
-            Board.font32.draw(sb, bonusDesc, Board.gameWidth / 2 - bonusDesc.width / 2, Board.gameHeight - 290);
+            Board.font32.draw(sb, bonusText, 0, 7 * Board.gameHeight / 10);
+            Board.font32.draw(sb, bonusDesc, 0, 6 * Board.gameHeight / 10);
         }
 
-        if (showGrade) {
-            switch (grade) {
-                case 'A':
-                    sb.draw(Board.stampA, Board.gameWidth / 2 - Board.gameWidth / 3, Board.gameHeight / 2, 2 * Board.gameWidth / 3, 2 * Board.gameWidth / 3);
-                    break;
-                case 'B':
-                    sb.draw(Board.stampB, Board.gameWidth / 2, -50);
-                    break;
-                case 'C':
-                    sb.draw(Board.stampC, Board.gameWidth / 2, -50);
-                    break;
-                case 'F':
-                    sb.draw(Board.stampF, Board.gameWidth / 2, -50);
-            }
-        }
 
         sb.end();
     }

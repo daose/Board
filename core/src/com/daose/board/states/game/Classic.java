@@ -46,7 +46,6 @@ public class Classic extends State {
     private int[] boardInfo;
 
     private Score score;
-    private int pitchIncrement;
     private int completeBonus;
 
     private float scoreTimer;
@@ -75,6 +74,7 @@ public class Classic extends State {
         createSolution(boardInfo[1]);
 
         score = new Score();
+        score.setYPos(Board.gameHeight - ((Board.gameHeight - (boardOffset + boardHeight)) / 2) + score.getLayout().height / 2);
         skip = new Button(Board.gameWidth / 2, boardOffset - Board.gameHeight / 10, Board.gameWidth / 5, Board.gameHeight / 20);
         skip.setText("skip", Color.DARK_GRAY, 32);
 
@@ -95,7 +95,6 @@ public class Classic extends State {
                         col * tileSize + tileSize / 2,
                         row * tileSize + boardOffset + tileSize / 2,
                         tileSize, tileSize);
-                //tiles[row][col].setTimer(-0.15f);
             }
         }
         setTileTimer();
@@ -122,7 +121,6 @@ public class Classic extends State {
         selected.clear();
         correct.clear();
 
-        pitchIncrement = 2 / boardInfo[0];
     }
 
     public void handleInput() {
@@ -168,7 +166,7 @@ public class Classic extends State {
             if (solution.contains(tiles[row][col], true)) {
                 stats.incrementCorrect();
                 correct.add(tiles[row][col]);
-                Board.tapped.play(1, correct.size * pitchIncrement, 1);
+                Board.tapped.play(1, 1, 1);
                 int incScore = (int) (5 * scoreTimer);
                 score.increment(incScore);
 

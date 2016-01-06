@@ -75,23 +75,6 @@ public class Score {
     }
 
     private void drawIncremented(SpriteBatch sb) {
-        if (incremented > 0) {
-            sb.setColor(0, 1, 0, (1 - timer / animationTime));
-            yPos += (timer * 50);
-        } else {
-            sb.setColor(1, 0, 0, (1 - timer / animationTime));
-            yPos += (timer * 50);
-        }
-        String incrementedText = Integer.toString(Math.abs(incremented));
-        /************
-        for (int i = 0; i < incrementedText.length(); i++) {
-            char c = incrementedText.charAt(i);
-            c -= '0';
-            int index = (int) c;
-            sb.draw(Board.numbers[index],
-                    (x + width / 2) + 10 + (20 * i), yPos, 20, 26);
-        }
-         **************/
-        sb.setColor(1, 1, 1, 1);
+
     }
 }
