@@ -42,7 +42,7 @@ public class MenuState extends State {
 
     private Button[] createButtons(int num) {
         Button[] buttons = new Button[num];
-        float initPos = Board.gameHeight / 2 / buttons.length / 2;
+        float initPos = (Board.gameHeight / 2 / (buttons.length + 1) / 2);
         for (int i = 0; i < buttons.length; i++) {
             buttons[i] = new Button(Board.gameWidth / 2, initPos + (i * 2 * initPos), (2 * Board.gameWidth / 3), Board.gameHeight / 8);
         }
